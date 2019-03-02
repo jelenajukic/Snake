@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- <link rel="stylesheet" href=" https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="name row">
+      <h1>SNAKES</h1>
+    </div>
+    <div class="game-area row">
+      <div class="rules">
+        <h1>Rules</h1>
+        <div id="rules-table">
+          <div class="rule">uses the arrow keys to move a "snake" </div>
+          <div class = "rule">eat the food and get the points</div>
+          <div class="rule">Skip the walls or you die</div>
+          
+
+
+
+        </div>
+      </div>
+      <div class="game">
+        <div class="score-div"><span>score:</span><span>apples</span></div>
+        <div id="canvas-div">
+          <canvas id="myCanvas" width="600px" height="600px"></canvas>
+          <!-- not visible before the end of game. It makes shadow on epage elements -->
+          <div id="page-mask"></div>
+
+          <div id="input-div">
+            <form action="">
+              <input id="input-field" type="text" value="type your name">
+              <button id="submit-button">submit</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div class="result-buttons">
+        <h1>The best result</h1>
+        <!-- <button>NEW GAME</button>
+        <button>PAUSE</button> -->
+        <div id="result"></div>
+      </div>
+    </div>
+    <div class="footer row">
+      <footer></footer>
+    </div>
+  </div>
+
+
+
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script> -->
+  <script type="text/javascript" src="./javascript/main.js"></script>
+</body>
+
+</html>
