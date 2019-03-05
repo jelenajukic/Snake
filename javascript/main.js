@@ -5,6 +5,7 @@ var interval;
 var food;
 //when page is loaded user has to see canvas with grid (game area)
 var shouldStart = "yes";
+var paused = false;
 
 
 var randomXYArray;
@@ -27,9 +28,6 @@ function Element(name, x, y, direction, imgSrc) {
   }
   //this.img.onload = this.drawElement();
   this.img.src = imgSrc;
-
-
-
 
 }
 
@@ -165,7 +163,7 @@ function Snake() {
       this.bodyElements[i].img = new Image();
       if (i == 0) {
         this.bodyElements[i].name = "head"
-        this.bodyElements[i].img.src = "./images/head.jpeg";
+        this.bodyElements[i].img.src = "./images/head.png";
       } else {
         this.bodyElements[i].name = "bodySnake";
         this.bodyElements[i].img.src = "./images/snake-element.png";
@@ -202,16 +200,13 @@ function MyCanvas() {
     for (var x = 0; x < 600; x += 60) {
       this.context.moveTo(x, 0);
       this.context.lineTo(x, 600);
-      this.context.fill();
-    //   this.context.fillStyle = "red";
-    // this.context.fill();
+
     }
 
     for (var y = 0; y < 600; y += 60) {
       this.context.moveTo(0, y);
       this.context.lineTo(600, y);
-    //   this.context.fillStyle = "red";
-    // this.context.fill();
+
     }
 
     this.context.moveTo(600, 0);
@@ -236,6 +231,7 @@ function MyCanvas() {
       snake.moveHead(snake.bodyElements[0]);
       gameCanvas.foodIsEaten(snake);
       food.drawElement();
+      // pauseGame()
 
     }, 250);
 
@@ -252,8 +248,28 @@ function MyCanvas() {
       return true;
     } else if (snakeElement.positionY >= 605 && snakeElement.direction == "down") {
       return true;
+    } else if (this.detectCollisionWithBody(snake)) {
+      return true;
     } else {
       return false;
+    }
+
+  }
+
+  this.detectCollisionWithBody = function (ourSnake) {
+    var collisionArr = _.cloneDeep(ourSnake);
+
+    var snakeHead = collisionArr.bodyElements.shift();
+
+    var collisionElement = collisionArr.bodyElements.find(element => element.positionX == snakeHead.positionX && element.positionY == snakeHead.positionY);
+
+    console.log(collisionElement);
+
+    if (collisionElement == undefined) {
+      return false;
+    } else {
+      console.log("collision with body")
+      return true;
     }
 
   }
@@ -264,9 +280,10 @@ function MyCanvas() {
 
     if (workingSnake.bodyElements[0].positionX == food.positionX && workingSnake.bodyElements[0].positionY == food.positionY) {
       console.log("yes");
-
+      this.addSnakeElement();
       this.score++;
       food = randomFood(snake);
+      document.getElementById("score").innerHTML = this.score;
       console.log("score is: ", this.score);
       console.log("new food is: ", food);
 
@@ -277,6 +294,12 @@ function MyCanvas() {
 
   }
 
+  this.addSnakeElement = function () {
+    var oudPositionX = snake.bodyElements[snake.bodyElements.length - 1].positionX;
+    var oudPositionY = snake.bodyElements[snake.bodyElements.length - 1].positionY;
+    snake.bodyElements.push(new Element("bodySnake", oudPositionX, oudPositionY, "down", snakeImages[1]))
+
+  }
 }
 
 
@@ -329,11 +352,22 @@ function startMovingSnake(command) {
 }
 
 function pressedKey(event) {
-
   console.log("key pressed");
-  snake.changeSnakeDirection(event.keyCode);
-  startMovingSnake(shouldStart);
-  shouldStart = "no";
+
+  if (event.keyCode == 32) {
+    pauseGame();
+  } else {
+
+
+    snake.changeSnakeDirection(event.keyCode);
+    startMovingSnake(shouldStart);
+    shouldStart = "no";
+    // paused=false;
+  }
+
+
+
+
 }
 
 function makeResultList() {
@@ -366,21 +400,21 @@ function presentResult() {
   while (i < theListOfBest.length) {
     var newDivFlex = document.createElement("div");
     newDivFlex.style.display = "flex";
-    newDivFlex.style.justifyContent="space-around"
-    newDivFlex.style.height="10%";
+    newDivFlex.style.justifyContent = "space-around"
+    newDivFlex.style.height = "10%";
     var newDivName = document.createElement("div");
     var newDivScore = document.createElement("div");
     var newDivNameText = document.createTextNode(theListOfBest[i].name);
     var newDivScoreText = document.createTextNode(theListOfBest[i].score);
-    newDivName.style.height="50%";
-    newDivName.style.width="50%";
-    newDivScore.style.height="50%";
-    newDivScore.style.width="50%"
-    newDivName.style.padding="20px";
-    newDivScore.style.padding="20px";
-    newDivName.style.fontSize="20px";
-    newDivScore.style.fontSize="20px";
-    newDivFlex.style.backgroundImage="url('./images/bg-name-rules-components.png')";
+    newDivName.style.height = "50%";
+    newDivName.style.width = "50%";
+    newDivScore.style.height = "50%";
+    newDivScore.style.width = "50%"
+    newDivName.style.padding = "20px";
+    newDivScore.style.padding = "20px";
+    newDivName.style.fontSize = "20px";
+    newDivScore.style.fontSize = "20px";
+    newDivFlex.style.backgroundImage = "url('./images/bg-name-rules-components.png')";
     // newDivScore.style.backgroundImage="url('./images/bg-name-rules-components.png')";
     document.getElementById("result").appendChild(newDivFlex);
     newDivFlex.appendChild(newDivName);
@@ -392,6 +426,19 @@ function presentResult() {
     i++;
   }
 
+
+
+}
+
+function pauseGame() {
+  if (paused == false) {
+    clearInterval(interval);
+    paused = true;
+
+  } else {
+    gameCanvas.updateCanvas();
+    paused = false;
+  }
 
 
 }
@@ -414,7 +461,7 @@ window.onload = function () {
     "./images/cheese.png", "./images/grapes.png", "./images/pear.png", "./images/strawberry.png"
   ];
 
-  snakeImages = ["./images/head.jpeg", "./images/snake-element.png"]
+  snakeImages = ["./images/head.png", "./images/snake-element.png"]
 
   snake = new Snake();
   console.log("MySnek is :", snake);
@@ -425,7 +472,7 @@ window.onload = function () {
     gameCanvas.context.drawImage(imgH, snake.bodyElements[0].positionX, snake.bodyElements[0].positionY, 50, 50);
 
   }
-  imgH.src = "./images/head.jpeg";
+  imgH.src = "./images/head.png";
 
   var imgB1 = new Image();
   imgB1.onload = function () {
@@ -453,6 +500,10 @@ window.onload = function () {
 
 
   presentResult();
+
+  document.getElementById("new-game").addEventListener("click", function () {
+    location.reload();
+  })
 
 
 
