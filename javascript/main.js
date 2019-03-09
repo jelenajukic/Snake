@@ -61,7 +61,7 @@ function moveElement(arr) {
 
 function finishGame() {
 
-  removeEventListener("keydown", pressedKey);
+  
   clearInterval(interval);
   gameCanvas.context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
   gameCanvas.drawMyCanvas();
@@ -70,8 +70,10 @@ function finishGame() {
   var el = document.getElementById("input-field");
   document.getElementById("submit-button").addEventListener("click", function () {
     localStorage.setItem(el.value, gameCanvas.score);
+    
 
   });
+  // removeEventListener("keydown", pressedKey);
 }
 
 
@@ -216,8 +218,10 @@ window.onload = function () {
   gameCanvas = new MyCanvas(); //create canvas object. canvas is global variable.
   gameCanvas.drawMyCanvas(); //then call drawMyCanvas method on canvasObject
 
-  // player = new Audio("game.mp3");
-  // player.play();
+  presentResult();
+
+  player = new Audio("game.mp3");
+  player.play();
 
 
   document.getElementById("new-game").addEventListener("click", function () {
