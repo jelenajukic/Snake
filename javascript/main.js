@@ -61,7 +61,7 @@ function moveElement(arr) {
 
 function finishGame() {
 
-  
+
   clearInterval(interval);
   gameCanvas.context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
   gameCanvas.drawMyCanvas();
@@ -70,10 +70,10 @@ function finishGame() {
   var el = document.getElementById("input-field");
   document.getElementById("submit-button").addEventListener("click", function () {
     localStorage.setItem(el.value, gameCanvas.score);
-    
+
 
   });
-  // removeEventListener("keydown", pressedKey);
+  removeEventListener("keydown", pressedKey);
 }
 
 
@@ -123,8 +123,9 @@ function pressedKey(event) {
 
     if (snake.changeSnakeDirection(event.keyCode)) {
       startMovingSnake(shouldStart);
+
       shouldStart = false;
-      
+
     };
 
   }
@@ -196,8 +197,13 @@ function pauseGame() {
 
 }
 
+player = new Audio();
+document.body.prepend(player);
+
 
 window.onload = function () {
+  
+
   snakeImages = ["./images/head.png", "./images/snake-element.png", "./images/head-sad.png"];
   randomFoodImgArr = ["./images/apple.png", "./images/banana.png", "./images/broccoli.png", "./images/carrot.png",
     "./images/cheese.png", "./images/grapes.png", "./images/pear.png", "./images/strawberry.png"
@@ -220,8 +226,12 @@ window.onload = function () {
 
   presentResult();
 
-  player = new Audio("game.mp3");
-  player.play();
+
+
+
+  //player.autoplay=true;
+
+
 
 
   document.getElementById("new-game").addEventListener("click", function () {

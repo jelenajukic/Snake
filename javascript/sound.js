@@ -1,14 +1,21 @@
-function sound(src) {
-  this.sound = document.createElement("audio");
-  this.sound.src = src;
-  this.sound.setAttribute("preload", "auto");
-  this.sound.setAttribute("controls", "none");
-  this.sound.style.display = "none";
-  // document.body.appendChild(this.sound);
-  this.play = function(){
-    this.sound.play();
-  }
-  this.stop = function(){
-    this.sound.pause();
-  }
+function sound() {
+ var  player = new Audio("./javascript/game.mp3");
+  player.addEventListener('canplaythrough', function (event) {
+    console.log(event)
+  })
+  return player;
 }
+
+
+
+player.src = "./javascript/game.mp3";
+  // player.autoplay = true;
+  // player.load();
+  // player.addEventListener('canplaythrough', function (event) {
+  //   // player.play()
+  //   console.log(event);
+  // })
+
+
+
+  // // player.autoplay=true;
